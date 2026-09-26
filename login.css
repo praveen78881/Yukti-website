@@ -122,7 +122,7 @@ select.input {
 .link-btn.center { display: block; margin: .9rem auto 0; }
 
 /* ---------- Titles, messages, account ---------- */
-.view-title { margin: 0; font-family: var(--display); font-size: 1.65rem; font-weight: 600; letter-spacing: 0; line-height: 1.25; }
+.view-title { margin: 0; font-family: var(--display); font-size: 1.5rem; font-weight: 600; letter-spacing: -.02em; line-height: 1.25; }
 .view-sub { margin-top: .5rem; color: var(--ink-2); text-wrap: pretty; }
 
 .done { display: grid; justify-items: start; gap: .3rem; }

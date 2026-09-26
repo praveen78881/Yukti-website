@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yukti — Coming Soon | Accounting, TDS/TCS, ITR Forms &amp; Auditing</title>
+  <meta name="description" content="Yukti is coming soon. All in one place: Accounting, TDS/TCS, ITR forms and Auditing.">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="color-scheme" content="light">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Yukti — Coming Soon">
+  <meta property="og:description" content="All in one place: Accounting, TDS/TCS, ITR forms, Auditing.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Sans+Devanagari:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="login.css">
+  <script>document.documentElement.classList.add('js')</script>
+</head>
+<body id="top">
+
+  <!-- Shared SVG symbols: logo mark, icons, gradients -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="g-brand" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#63b3ff"/>
+        <stop offset="1" stop-color="#1a5bd1"/>
+      </linearGradient>
+      <linearGradient id="g-bar" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6fb0ff"/>
+        <stop offset="1" stop-color="#cde4ff"/>
+      </linearGradient>
+
+      <!-- Two arms converging into one stem: many things, one place -->
+      <symbol id="logo" viewBox="0 0 40 40">
+        <rect width="40" height="40" rx="11" fill="url(#g-brand)"/>
+        <path d="M11.5 10.5 20 21" stroke="#fff" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+        <path d="M28.5 10.5 20 21" stroke="#fff" stroke-opacity=".72" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+        <path d="M20 21v9" stroke="#fff" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+      </symbol>
+
+      <symbol id="i-calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="3" width="14" height="18" rx="3"/>
+        <rect x="8.5" y="6.5" width="7" height="3.5" rx="1"/>
+        <path d="M9 14h.01M12 14h.01M15 14h.01M9 17.5h.01M12 17.5h.01M15 17.5h.01" stroke-width="2.4"/>
+      </symbol>
+      <symbol id="i-percent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9.5"/>
+        <path d="M15.5 8.5 8.5 15.5"/>
+        <circle cx="9" cy="9" r="1.1"/>
+        <circle cx="15" cy="15" r="1.1"/>
+      </symbol>
+      <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/>
+        <path d="M14 3v5h5"/>
+        <path d="M9 13h6M9 17h4"/>
+      </symbol>
+      <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3 5 6v5.2c0 4.4 3 7.9 7 9.8 4-1.9 7-5.4 7-9.8V6z"/>
+        <path d="m9 12 2.2 2.2L15.5 10"/>
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m5 12.5 4.5 4.5L19 7.5"/>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="3"/>
+        <path d="m4 8 8 5.5L20 8"/>
+      </symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="7" y="2.5" width="10" height="19" rx="2.5"/>
+        <path d="M11 18.5h2"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- Aurora + dot-grid background -->
+  <div class="bg" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="dots"></span>
+  </div>
+
+  <header class="nav-wrap">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Yukti, back to top">
+        <svg class="brand-mark" aria-hidden="true"><use href="#logo"/></svg>
+        <span class="brand-name">Yukti</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+      <a class="btn btn-primary btn-sm" href="#login">Log in</a>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="container hero-grid">
+
+        <div class="hero-copy">
+          <p class="pill reveal">
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span class="pill-strong">Coming Soon</span>
+          </p>
+
+          <h1 class="reveal" style="--d:.08s">
+            <span class="sr-only">All in one place: Accounting, TDS/TCS, ITR forms, Auditing</span>
+            <span class="h1-line" aria-hidden="true">All in one place:</span>
+            <span class="rotator" aria-hidden="true">
+              <span class="rot-word">Accounting</span>
+              <span class="rot-word">TDS/TCS</span>
+              <span class="rot-word">ITR Forms</span>
+              <span class="rot-word">Auditing</span>
+            </span>
+          </h1>
+
+          <figure class="quote reveal" style="--d:.16s">
+            <blockquote>
+              <p>Your numbers should be the <em>calmest</em> part of your day.</p>
+            </blockquote>
+          </figure>
+        </div>
+
+        <!-- Decorative orbit around the mark: many things, one place -->
+        <div class="hero-visual">
+          <div class="hub reveal" style="--d:.2s" aria-hidden="true">
+            <svg class="hub-lines" viewBox="0 0 100 100">
+              <circle class="ring r1" cx="50" cy="50" r="27"/>
+              <circle class="ring r2" cx="50" cy="50" r="44"/>
+              <g class="orbit o1">
+                <circle class="node" cx="50" cy="6" r="2.4"/>
+                <circle class="node alt" cx="94" cy="50" r="2.4"/>
+                <circle class="node" cx="50" cy="94" r="2.4"/>
+                <circle class="node alt" cx="6" cy="50" r="2.4"/>
+              </g>
+              <g class="orbit o2">
+                <circle class="node alt sm" cx="50" cy="23" r="1.7"/>
+                <circle class="node sm" cx="50" cy="77" r="1.7"/>
+              </g>
+            </svg>
+            <div class="core">
+              <svg class="core-mark"><use href="#logo"/></svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ CONTENT ============ -->
+    <section class="section" id="content">
+      <div class="container">
+
+        <div id="services">
+          <header class="section-head reveal">
+            <h2>Built for the whole <em>financial year.</em></h2>
+          </header>
+
+          <div class="bento">
+
+            <article class="card card-lg c-acc reveal">
+              <div class="card-body">
+                <span class="ico-tile"><svg class="ico"><use href="#i-calc"/></svg></span>
+                <h3>Accounting</h3>
+                <p>Books that stay organised and reconciled, ready whenever you need them.</p>
+                <ul class="tags">
+                  <li>Bookkeeping</li><li>Ledgers</li><li>Financial statements</li>
+                </ul>
+              </div>
+              <div class="viz-panel viz-bars" aria-hidden="true">
+                <svg viewBox="0 0 240 140">
+                  <rect class="bar" style="--i:0" x="6"   y="90" width="28" height="50" rx="9"/>
+                  <rect class="bar" style="--i:1" x="45"  y="72" width="28" height="68" rx="9"/>
+                  <rect class="bar" style="--i:2" x="84"  y="82" width="28" height="58" rx="9"/>
+                  <rect class="bar" style="--i:3" x="123" y="50" width="28" height="90" rx="9"/>
+                  <rect class="bar" style="--i:4" x="162" y="58" width="28" height="82" rx="9"/>
+                  <rect class="bar" style="--i:5" x="201" y="24" width="28" height="116" rx="9"/>
+                  <path class="trend" pathLength="1" d="M20 80 C 58 60, 92 76, 137 40 S 205 20, 215 12"/>
+                  <circle class="pin" cx="215" cy="12" r="5.5"/>
+                </svg>
+              </div>
+            </article>
+
+            <article class="card c-tds reveal" style="--d:.08s">
+              <span class="ico-tile"><svg class="ico"><use href="#i-percent"/></svg></span>
+              <h3>TDS/TCS</h3>
+              <p>Tax deducted and collected at source, worked out accurately, paid and reported on time.</p>
+              <div class="card-foot">
+                <svg class="donut" viewBox="0 0 120 120" aria-hidden="true">
+                  <circle class="d-track" cx="60" cy="60" r="46"/>
+                  <circle class="d-arc d1" cx="60" cy="60" r="46" pathLength="100" transform="rotate(-90 60 60)"/>
+                  <circle class="d-arc d2" cx="60" cy="60" r="46" pathLength="100" transform="rotate(-90 60 60)"/>
+                </svg>
+                <ul class="tags">
+                  <li>Calculations</li><li>Challan payments</li><li>Quarterly statements</li><li>Certificates</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="card c-itr reveal" style="--d:.08s">
+              <span class="ico-tile"><svg class="ico"><use href="#i-file"/></svg></span>
+              <h3>ITR Forms</h3>
+              <p>The right return for every kind of taxpayer, prepared with care and filed correctly.</p>
+              <ul class="forms" role="img" aria-label="Forms 1 to 7">
+                <li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li>
+              </ul>
+            </article>
+
+            <article class="card card-lg c-aud reveal" style="--d:.16s">
+              <div class="card-body">
+                <span class="ico-tile"><svg class="ico"><use href="#i-shield"/></svg></span>
+                <h3>Auditing</h3>
+                <p>Records and paperwork kept in order, so a review moves smoothly from start to sign-off.</p>
+                <ul class="tags">
+                  <li>Statutory audit</li><li>Tax audit</li><li>Working papers</li>
+                </ul>
+              </div>
+              <div class="viz-panel viz-checks" aria-hidden="true">
+                <ul>
+                  <li style="--i:0"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span><span class="skel" style="--w:78%"></span></li>
+                  <li style="--i:1"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span><span class="skel" style="--w:92%"></span></li>
+                  <li style="--i:2"><span class="tick"><svg class="ico"><use href="#i-check"/></svg></span><span class="skel" style="--w:64%"></span></li>
+                  <li style="--i:3" class="pending"><span class="tick"></span><span class="skel" style="--w:84%"></span></li>
+                </ul>
+              </div>
+            </article>
+
+          </div>
+        </div>
+
+        <aside class="about reveal" id="about" aria-labelledby="about-title">
+          <div class="about-word" lang="sa" aria-hidden="true">युक्ति</div>
+          <div class="about-copy">
+            <p class="eyebrow">About the name</p>
+            <h2 id="about-title">Yukti, in <em>one word.</em></h2>
+            <p>In Sanskrit, it means a clever, well-reasoned solution. That is the standard we are building to.</p>
+          </div>
+        </aside>
+
+        <!-- Log in: email or phone number, one-time code -->
+        <section class="login-block reveal" id="login" aria-labelledby="login-title">
+          <div class="login-intro">
+            <h2 id="login-title">Log in. <em>No password.</em></h2>
+            <p>A one-time code is all it takes. Choose how you’d like to receive it.</p>
+            <p id="mode-note" class="note" role="note" hidden></p>
+          </div>
+
+          <div class="login-card">
+
+            <!-- Step 1: who are you? -->
+            <div id="step-identify" class="step">
+              <div class="tabs" role="tablist" aria-label="Log in with" data-tab="email">
+                <span class="tab-thumb" aria-hidden="true"></span>
+                <button id="tab-email" class="tab" type="button" role="tab" data-channel="email"
+                        aria-selected="true" aria-controls="panel-email">
+                  <svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span>
+                </button>
+                <button id="tab-phone" class="tab" type="button" role="tab" data-channel="phone"
+                        aria-selected="false" aria-controls="panel-phone" tabindex="-1">
+                  <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Phone</span>
+                </button>
+              </div>
+
+              <form id="login-form" novalidate>
+                <div id="panel-email" class="field" role="tabpanel" aria-labelledby="tab-email">
+                  <label for="login-email">Email address</label>
+                  <input id="login-email" class="input" name="email" type="email" inputmode="email"
+                         autocomplete="email" placeholder="name@example.com" autocapitalize="off" spellcheck="false">
+                </div>
+
+                <div id="panel-phone" class="field" role="tabpanel" aria-labelledby="tab-phone" hidden>
+                  <label for="login-phone">Mobile number</label>
+                  <div class="phone-row">
+                    <select id="login-cc" class="input" name="cc" aria-label="Country code">
+                      <option value="+91" selected>IN +91</option>
+                      <option value="+1">US +1</option>
+                      <option value="+44">UK +44</option>
+                      <option value="+971">AE +971</option>
+                      <option value="+65">SG +65</option>
+                      <option value="+61">AU +61</option>
+                    </select>
+                    <input id="login-phone" class="input" name="phone" type="tel" inputmode="tel"
+                           autocomplete="tel-national" placeholder="98765 43210">
+                  </div>
+                </div>
+
+                <p id="login-status" class="status" role="status" aria-live="polite"></p>
+
+                <button id="send-btn" class="btn btn-primary btn-block" type="submit">
+                  <span>Send code</span>
+                  <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </button>
+              </form>
+            </div>
+
+            <!-- Step 2: enter the code -->
+            <div id="step-verify" class="step" hidden>
+              <p class="verify-lead">Enter the 6-digit code we sent to <strong id="verify-target"></strong>.</p>
+
+              <form id="verify-form" novalidate>
+                <div class="otp" role="group" aria-label="6-digit code">
+                  <input id="otp-1" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1 of 6">
+                  <input id="otp-2" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 2 of 6">
+                  <input id="otp-3" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 3 of 6">
+                  <input id="otp-4" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 4 of 6">
+                  <input id="otp-5" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 5 of 6">
+                  <input id="otp-6" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 6 of 6">
+                </div>
+
+                <p id="verify-status" class="status" role="status" aria-live="polite"></p>
+
+                <button id="verify-btn" class="btn btn-primary btn-block" type="submit">
+                  <span>Verify and log in</span>
+                </button>
+              </form>
+
+              <div class="verify-actions">
+                <button id="resend-btn" class="link-btn" type="button" disabled>Resend code</button>
+                <button id="change-btn" class="link-btn" type="button">Use a different email</button>
+              </div>
+            </div>
+
+            <!-- Step 3: done -->
+            <div id="step-done" class="step done" hidden tabindex="-1">
+              <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+              <h3 id="done-title">You’re logged in</h3>
+              <p id="done-text"></p>
+              <button id="restart-btn" class="link-btn" type="button">Log in with another account</button>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">&copy; <span id="year">2026</span> Yukti. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+  <script src="login.js" defer></script>
+</body>
+</html>

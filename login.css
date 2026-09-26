@@ -93,6 +93,9 @@ select.input {
 .status.err { color: var(--danger); }
 .status.ok { color: var(--success); }
 .btn-block { width: 100%; margin-top: .3rem; }
+.privacy { margin-top: .9rem; font-size: .82rem; text-align: center; color: var(--ink-3); }
+.privacy[hidden] { display: none; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
 
 /* ---------- One-time code ---------- */
 .verify-lead { color: var(--ink-2); overflow-wrap: anywhere; }

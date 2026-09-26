@@ -2,29 +2,38 @@
   'use strict';
 
   /* -------------------------------------------------------------------------
-     Sign-in service
-     Log in works with a one-time code sent to an email address or a mobile
-     number. The code must be created, sent and checked on a server; this page
-     only collects the details and calls these two endpoints (JSON POST):
+     How this section works
 
-       sendUrl    { channel: 'email' | 'phone', identifier }         -> 2xx once the code is sent
-       verifyUrl  { channel, identifier, code }                      -> 2xx if the code is right
-                  (respond with 400/401/422 for a wrong code, 429 for too many tries;
-                   set the session as an HttpOnly cookie, never in the page)
-       redirectTo where to send people after a successful log in
+     1. LAUNCH LIST (default, nothing to set up)
+        A visitor leaves an email address or a mobile number. On a Netlify site
+        it is saved by Netlify Forms under the name "yukti-signup". You read the
+        entries in Netlify: open the project, then the Forms tab.
 
-     Good fits: Firebase Auth, Supabase Auth, or your own API with an SMS
-     provider such as MSG91 or Twilio for phone codes and any mail service for
-     email codes.
+     2. REAL LOG IN (later)
+        Set BOTH sendUrl and verifyUrl below and the section turns into a
+        one-time-code login. The code has to be created, sent and checked by a
+        server, which then answers these JSON POST requests:
 
-     Until both URLs are set the page is honest about it: on localhost it runs
-     as a clearly labelled preview (no code is sent, any 6 digits pass), and on
-     a live site it says log in is not open yet. It never signs anyone in.
+          sendUrl    { channel: 'email' | 'phone', identifier }   -> 2xx once the code is sent
+          verifyUrl  { channel, identifier, code }                -> 2xx if the code is right
+                     (400 / 401 / 422 for a wrong code, 429 for too many tries;
+                      the server sets the session in an HttpOnly cookie)
+          redirectTo where to send people after a successful log in
+
+        Good fits: Firebase Auth, Supabase Auth, or your own API with an SMS
+        provider such as MSG91 or Twilio for phone codes.
+
+     These values are visible to anyone who views the page source, so never
+     put a secret key here. You can also set window.YUKTI_CONFIG before this
+     script loads to override any of them.
      ------------------------------------------------------------------------- */
-  const AUTH = {
+  const CONFIG = {
     sendUrl: '',
     verifyUrl: '',
     redirectTo: '',
+    formName: 'yukti-signup',
+    simulate: null, // null = automatic: preview only on localhost or a local file, real on a live site
+    ...window.YUKTI_CONFIG,
   };
 
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -33,11 +42,14 @@
   if (!$('.login-card')) return;
 
   const isLocal = ['', 'localhost', '127.0.0.1', '[::1]'].includes(location.hostname);
-  const live = Boolean(AUTH.sendUrl && AUTH.verifyUrl);
-  const demo = !live && isLocal;
+  const simulate = CONFIG.simulate === null ? isLocal : Boolean(CONFIG.simulate);
+  const live = Boolean(CONFIG.sendUrl && CONFIG.verifyUrl);
 
   const el = {
+    title: $('#login-title'),
+    lede: $('#login-lede'),
     note: $('#mode-note'),
+    privacy: $('#privacy-note'),
     tabs: $('.tabs'),
     tabEmail: $('#tab-email'),
     tabPhone: $('#tab-phone'),
@@ -47,6 +59,8 @@
     stepVerify: $('#step-verify'),
     stepDone: $('#step-done'),
     form: $('#login-form'),
+    channelField: $('#login-channel'),
+    honeypot: $('#bot-field'),
     email: $('#login-email'),
     cc: $('#login-cc'),
     phone: $('#login-phone'),
@@ -60,8 +74,11 @@
     resend: $('#resend-btn'),
     change: $('#change-btn'),
     restart: $('#restart-btn'),
+    doneTitle: $('#done-title'),
     doneText: $('#done-text'),
   };
+
+  const sendLabel = live ? 'Send code' : 'Notify me';
 
   let channel = 'email';
   let identifier = '';
@@ -101,26 +118,23 @@
     return res;
   };
 
-  const sendCode = async () => {
-    if (live) await post(AUTH.sendUrl, { channel, identifier });
-    else await delay(500);
-  };
-
-  /* ---------- Mode banner ---------- */
-  if (demo) {
+  /* ---------- Wording for the current mode ---------- */
+  if (live) {
+    el.title.innerHTML = 'Log in. <em>No password.</em>';
+    el.lede.textContent = 'A one-time code is all it takes. Choose how you’d like to receive it.';
+    el.privacy.hidden = true;
+    el.restart.textContent = 'Log in with another account';
+    el.sendBtn.querySelector('span').textContent = sendLabel;
+  } else if (simulate) {
     el.note.hidden = false;
-    el.note.textContent = 'Preview mode: no code is sent and nothing is stored. Enter any 6 digits to continue.';
-  } else if (!live) {
-    el.note.hidden = false;
-    el.note.classList.add('note-warn');
-    el.note.textContent = 'Log in isn’t open yet. It goes live when Yukti launches.';
-    $$('input, select, button[type="submit"]', el.form).forEach((node) => { node.disabled = true; });
+    el.note.textContent = 'Preview mode: nothing is saved here. On the live site your details are sent to Yukti.';
   }
 
   /* ---------- Email / phone tabs ---------- */
   const setChannel = (next, focus = false) => {
     channel = next;
     const isEmail = next === 'email';
+    el.channelField.value = next;
     el.tabs.dataset.tab = next;
     el.tabEmail.setAttribute('aria-selected', String(isEmail));
     el.tabPhone.setAttribute('aria-selected', String(!isEmail));
@@ -147,7 +161,7 @@
   // The "Log in" button in the nav scrolls here; put the cursor in the field once it arrives.
   $$('a[href="#login"]').forEach((link) => {
     link.addEventListener('click', () => {
-      if (!el.stepIdentify.hidden && !el.email.disabled) {
+      if (!el.stepIdentify.hidden) {
         const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
         setTimeout(() => (channel === 'email' ? el.email : el.phone).focus({ preventScroll: true }), reduce ? 0 : 600);
       }
@@ -192,10 +206,40 @@
     field.addEventListener('input', () => { flagInvalid(field, false); say(el.loginStatus); });
   });
 
-  /* ---------- Step 1: send the code ---------- */
+  /* ---------- Saving a visitor to the launch list (Netlify Forms) ---------- */
+  const saveContact = async () => {
+    if (simulate) { await delay(500); return; }
+    const body = new URLSearchParams({
+      'form-name': CONFIG.formName,
+      channel,
+      email: channel === 'email' ? identifier : '',
+      phone: channel === 'phone' ? identifier : '',
+      'bot-field': '',
+    });
+    const res = await fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    });
+    if (!res.ok) {
+      const err = new Error(`HTTP ${res.status}`);
+      err.status = res.status;
+      throw err;
+    }
+  };
+
+  const finishSignup = () => {
+    el.stepIdentify.hidden = true;
+    el.stepDone.hidden = false;
+    el.doneTitle.textContent = 'You’re on the list';
+    el.doneText.textContent = `We’ll contact you at ${shown} the day Yukti launches.${simulate ? ' Preview only: nothing was saved.' : ''}`;
+    el.stepDone.focus();
+  };
+
+  /* ---------- Step 1: submit the details ---------- */
   el.form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!live && !demo) return;
+    if (el.honeypot.value) return; // only bots fill this hidden field in
 
     const entry = readIdentifier();
     if (entry.error) {
@@ -207,26 +251,33 @@
 
     identifier = entry.id;
     shown = entry.mask;
-    busy(el.sendBtn, 'Sending code…', true);
+    busy(el.sendBtn, live ? 'Sending code…' : 'Saving…', true);
     say(el.loginStatus);
     try {
-      await sendCode();
-      showVerify();
+      if (live) {
+        await post(CONFIG.sendUrl, { channel, identifier });
+        showVerify();
+      } else {
+        await saveContact();
+        finishSignup();
+      }
     } catch (err) {
-      console.error('[Yukti] send code failed:', err);
+      console.error('[Yukti] submit failed:', err);
       say(
         el.loginStatus,
         err.status === 429
           ? 'Too many requests. Please wait a few minutes and try again.'
-          : 'We couldn’t send the code. Check your details and try again.',
+          : live
+            ? 'We couldn’t send the code. Check your details and try again.'
+            : 'We couldn’t save your details just now. Please try again in a moment.',
         'err',
       );
     } finally {
-      busy(el.sendBtn, 'Send code', false);
+      busy(el.sendBtn, sendLabel, false);
     }
   });
 
-  /* ---------- Step 2: enter the code ---------- */
+  /* ---------- Step 2 (real log in only): enter the code ---------- */
   const startTimer = (seconds = 30) => {
     clearInterval(timerId);
     let left = seconds;
@@ -297,7 +348,7 @@
 
   el.verifyForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (el.verifyBtn.disabled) return;
+    if (!live || el.verifyBtn.disabled) return;
 
     const code = el.otp.map((o) => o.value).join('');
     if (!/^\d{6}$/.test(code)) {
@@ -309,9 +360,8 @@
     busy(el.verifyBtn, 'Checking…', true);
     say(el.verifyStatus);
     try {
-      if (live) await post(AUTH.verifyUrl, { channel, identifier, code });
-      else await delay(500);
-      finish();
+      await post(CONFIG.verifyUrl, { channel, identifier, code });
+      finishLogin();
     } catch (err) {
       console.error('[Yukti] verify failed:', err);
       const wrong = [400, 401, 422].includes(err.status);
@@ -335,7 +385,7 @@
   el.resend.addEventListener('click', async () => {
     el.resend.disabled = true;
     try {
-      await sendCode();
+      await post(CONFIG.sendUrl, { channel, identifier });
       clearOtp();
       say(el.verifyStatus, 'A new code is on its way.', 'ok');
       startTimer();
@@ -355,7 +405,20 @@
     (channel === 'email' ? el.email : el.phone).focus();
   });
 
-  /* ---------- Step 3: done ---------- */
+  /* ---------- Finished ---------- */
+  const finishLogin = () => {
+    if (CONFIG.redirectTo) {
+      location.assign(CONFIG.redirectTo);
+      return;
+    }
+    clearInterval(timerId);
+    el.stepVerify.hidden = true;
+    el.stepDone.hidden = false;
+    el.doneTitle.textContent = 'You’re logged in';
+    el.doneText.textContent = `You’re logged in as ${shown}.`;
+    el.stepDone.focus();
+  };
+
   el.restart.addEventListener('click', () => {
     el.stepDone.hidden = true;
     el.stepIdentify.hidden = false;
@@ -365,18 +428,4 @@
     setChannel('email');
     el.email.focus();
   });
-
-  const finish = () => {
-    if (live && AUTH.redirectTo) {
-      location.assign(AUTH.redirectTo);
-      return;
-    }
-    clearInterval(timerId);
-    el.stepVerify.hidden = true;
-    el.stepDone.hidden = false;
-    el.doneText.textContent = live
-      ? `You’re logged in as ${shown}.`
-      : 'Preview complete. On the live site, this is where you would land in your account.';
-    el.stepDone.focus();
-  };
 })();

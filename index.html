@@ -250,8 +250,8 @@
         <!-- Log in: email or phone number, one-time code -->
         <section class="login-block reveal" id="login" aria-labelledby="login-title">
           <div class="login-intro">
-            <h2 id="login-title">Log in. <em>No password.</em></h2>
-            <p>A one-time code is all it takes. Choose how you’d like to receive it.</p>
+            <h2 id="login-title">Log in opens <em>at launch.</em></h2>
+            <p id="login-lede">Leave your details and we’ll let you know the day it does.</p>
             <p id="mode-note" class="note" role="note" hidden></p>
           </div>
 
@@ -271,7 +271,12 @@
                 </button>
               </div>
 
-              <form id="login-form" novalidate>
+              <!-- Netlify Forms picks this form up when the site is deployed (see login.js) -->
+              <form id="login-form" name="yukti-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+                <input type="hidden" name="form-name" value="yukti-signup">
+                <input type="hidden" name="channel" id="login-channel" value="email">
+                <p class="hp" aria-hidden="true"><label>Leave this empty <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
                 <div id="panel-email" class="field" role="tabpanel" aria-labelledby="tab-email">
                   <label for="login-email">Email address</label>
                   <input id="login-email" class="input" name="email" type="email" inputmode="email"
@@ -297,9 +302,10 @@
                 <p id="login-status" class="status" role="status" aria-live="polite"></p>
 
                 <button id="send-btn" class="btn btn-primary btn-block" type="submit">
-                  <span>Send code</span>
+                  <span>Notify me</span>
                   <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
                 </button>
+                <p id="privacy-note" class="privacy">We’ll only use this to tell you when Yukti launches.</p>
               </form>
             </div>
 
@@ -335,7 +341,7 @@
               <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
               <h3 id="done-title">You’re logged in</h3>
               <p id="done-text"></p>
-              <button id="restart-btn" class="link-btn" type="button">Log in with another account</button>
+              <button id="restart-btn" class="link-btn" type="button">Add another email or number</button>
             </div>
 
           </div>

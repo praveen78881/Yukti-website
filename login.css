@@ -146,3 +146,9 @@ select.input {
 @media (prefers-reduced-motion: reduce) {
   .login-card::before { animation: none !important; }
 }
+
+/* Touchscreens: comfortable tap targets (about 44px) */
+@media (pointer: coarse) {
+  .tab, .link-btn { min-height: 44px; }
+  .pw-toggle { min-height: 36px; padding-inline: .95rem; }
+}

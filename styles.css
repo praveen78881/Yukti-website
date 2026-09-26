@@ -455,3 +455,8 @@ h2 em { font-family: var(--serif); font-style: italic; font-weight: 400; font-si
   .rot-word:first-child { opacity: 1; }
   .core::before, .pill-dot::after { opacity: 0; }
 }
+
+/* ---------- Touchscreens: comfortable tap targets (about 44px) ---------- */
+@media (pointer: coarse) {
+  .btn, .brand { min-height: 44px; }
+}

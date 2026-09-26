@@ -337,6 +337,7 @@
       forgotStatus: $('#acct-forgot-status'),
       forgotBtn: $('#acct-forgot-btn'),
       resetForm: $('#acct-reset-form'),
+      resetUser: $('#acct-reset-user'),
       resetPassword: $('#acct-reset-password'),
       resetStatus: $('#acct-reset-status'),
       resetBtn: $('#acct-reset-btn'),
@@ -638,7 +639,10 @@
         scrollHere();
         return true;
       }
-      if (type === 'recovery') show('reset');
+      if (type === 'recovery') {
+        el.resetUser.value = (session && session.user && session.user.email) || '';
+        show('reset');
+      }
       else showAccount(type === 'signup' ? 'Email confirmed' : 'You’re logged in');
       scrollHere();
       return true;

@@ -247,7 +247,8 @@
           </div>
         </aside>
 
-        <!-- Log in: email or phone number, one-time code -->
+        <!-- Log in / create account. Two modes, chosen in login.js:
+             accounts = real sign-up and log in (needs Supabase), launch list = email or phone saved by Netlify Forms -->
         <section class="login-block reveal" id="login" aria-labelledby="login-title">
           <div class="login-intro">
             <h2 id="login-title">Log in opens <em>at launch.</em></h2>
@@ -257,91 +258,190 @@
 
           <div class="login-card">
 
-            <!-- Step 1: who are you? -->
-            <div id="step-identify" class="step">
-              <div class="tabs" role="tablist" aria-label="Log in with" data-tab="email">
+            <!-- ===== Accounts (hidden until a sign-in service is connected) ===== -->
+            <div id="accounts" hidden>
+              <div id="acct-tabs" class="tabs" role="tablist" aria-label="Account" data-tab="login">
                 <span class="tab-thumb" aria-hidden="true"></span>
-                <button id="tab-email" class="tab" type="button" role="tab" data-channel="email"
-                        aria-selected="true" aria-controls="panel-email">
-                  <svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span>
-                </button>
-                <button id="tab-phone" class="tab" type="button" role="tab" data-channel="phone"
-                        aria-selected="false" aria-controls="panel-phone" tabindex="-1">
-                  <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Phone</span>
-                </button>
+                <button id="acct-tab-login" class="tab" type="button" role="tab" data-go="login"
+                        aria-selected="true" aria-controls="acct-login"><span>Log in</span></button>
+                <button id="acct-tab-signup" class="tab" type="button" role="tab" data-go="signup"
+                        aria-selected="false" aria-controls="acct-signup" tabindex="-1"><span>Create account</span></button>
               </div>
 
-              <!-- Netlify Forms picks this form up when the site is deployed (see login.js) -->
-              <form id="login-form" name="yukti-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-                <input type="hidden" name="form-name" value="yukti-signup">
-                <input type="hidden" name="channel" id="login-channel" value="email">
-                <p class="hp" aria-hidden="true"><label>Leave this empty <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
-
-                <div id="panel-email" class="field" role="tabpanel" aria-labelledby="tab-email">
-                  <label for="login-email">Email address</label>
-                  <input id="login-email" class="input" name="email" type="email" inputmode="email"
-                         autocomplete="email" placeholder="name@example.com" autocapitalize="off" spellcheck="false">
-                </div>
-
-                <div id="panel-phone" class="field" role="tabpanel" aria-labelledby="tab-phone" hidden>
-                  <label for="login-phone">Mobile number</label>
-                  <div class="phone-row">
-                    <select id="login-cc" class="input" name="cc" aria-label="Country code">
-                      <option value="+91" selected>IN +91</option>
-                      <option value="+1">US +1</option>
-                      <option value="+44">UK +44</option>
-                      <option value="+971">AE +971</option>
-                      <option value="+65">SG +65</option>
-                      <option value="+61">AU +61</option>
-                    </select>
-                    <input id="login-phone" class="input" name="phone" type="tel" inputmode="tel"
-                           autocomplete="tel-national" placeholder="98765 43210">
+              <!-- Log in -->
+              <section id="acct-login" class="view" role="tabpanel" aria-labelledby="acct-tab-login" data-panel="login">
+                <form id="acct-login-form" method="post" action="#" novalidate>
+                  <div class="field">
+                    <label for="acct-login-email">Email address</label>
+                    <input id="acct-login-email" class="input" type="email" inputmode="email" autocomplete="username"
+                           placeholder="name@example.com" autocapitalize="off" spellcheck="false">
                   </div>
-                </div>
+                  <div class="field">
+                    <label for="acct-login-password">Password</label>
+                    <div class="pw">
+                      <input id="acct-login-password" class="input" type="password" autocomplete="current-password">
+                      <button class="pw-toggle" type="button" data-for="acct-login-password" aria-pressed="false" aria-label="Show password">Show</button>
+                    </div>
+                  </div>
+                  <p id="acct-login-status" class="status" role="status" aria-live="polite"></p>
+                  <button id="acct-login-btn" class="btn btn-primary btn-block" type="submit">
+                    <span>Log in</span>
+                    <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+                  </button>
+                  <button class="link-btn center" type="button" data-go="forgot">Forgot password?</button>
+                </form>
+              </section>
 
-                <p id="login-status" class="status" role="status" aria-live="polite"></p>
+              <!-- Create account -->
+              <section id="acct-signup" class="view" role="tabpanel" aria-labelledby="acct-tab-signup" data-panel="signup" hidden>
+                <form id="acct-signup-form" method="post" action="#" novalidate>
+                  <div class="field">
+                    <label for="acct-signup-email">Email address</label>
+                    <input id="acct-signup-email" class="input" type="email" inputmode="email" autocomplete="email"
+                           placeholder="name@example.com" autocapitalize="off" spellcheck="false">
+                  </div>
+                  <div class="field">
+                    <label for="acct-signup-phone">Mobile number</label>
+                    <div class="phone-row">
+                      <select id="acct-signup-cc" class="input" aria-label="Country code">
+                        <option value="+91" selected>IN +91</option>
+                        <option value="+1">US +1</option>
+                        <option value="+44">UK +44</option>
+                        <option value="+971">AE +971</option>
+                        <option value="+65">SG +65</option>
+                        <option value="+61">AU +61</option>
+                      </select>
+                      <input id="acct-signup-phone" class="input" type="tel" inputmode="tel"
+                             autocomplete="tel-national" placeholder="98765 43210">
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="acct-signup-password">Password</label>
+                    <div class="pw">
+                      <input id="acct-signup-password" class="input" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+                      <button class="pw-toggle" type="button" data-for="acct-signup-password" aria-pressed="false" aria-label="Show password">Show</button>
+                    </div>
+                  </div>
+                  <p id="acct-signup-status" class="status" role="status" aria-live="polite"></p>
+                  <button id="acct-signup-btn" class="btn btn-primary btn-block" type="submit">
+                    <span>Create account</span>
+                    <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+                  </button>
+                  <p class="privacy">We’ll only use these details for your Yukti account and launch news.</p>
+                </form>
+              </section>
 
-                <button id="send-btn" class="btn btn-primary btn-block" type="submit">
-                  <span>Notify me</span>
-                  <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
-                </button>
-                <p id="privacy-note" class="privacy">We’ll only use this to tell you when Yukti launches.</p>
-              </form>
+              <!-- Forgot password -->
+              <section id="acct-forgot" class="view" data-panel="forgot" aria-labelledby="forgot-title" hidden>
+                <h3 id="forgot-title" class="view-title">Reset your password</h3>
+                <p class="view-sub">Enter your email and we’ll send you a link to choose a new one.</p>
+                <form id="acct-forgot-form" method="post" action="#" novalidate>
+                  <div class="field">
+                    <label for="acct-forgot-email">Email address</label>
+                    <input id="acct-forgot-email" class="input" type="email" inputmode="email" autocomplete="email"
+                           placeholder="name@example.com" autocapitalize="off" spellcheck="false">
+                  </div>
+                  <p id="acct-forgot-status" class="status" role="status" aria-live="polite"></p>
+                  <button id="acct-forgot-btn" class="btn btn-primary btn-block" type="submit"><span>Send reset link</span></button>
+                  <button class="link-btn center" type="button" data-go="login">Back to log in</button>
+                </form>
+              </section>
+
+              <!-- Choose a new password (opened from the emailed link) -->
+              <section id="acct-reset" class="view" data-panel="reset" aria-labelledby="reset-title" hidden>
+                <h3 id="reset-title" class="view-title">Choose a new password</h3>
+                <form id="acct-reset-form" method="post" action="#" novalidate>
+                  <div class="field">
+                    <label for="acct-reset-password">New password</label>
+                    <div class="pw">
+                      <input id="acct-reset-password" class="input" type="password" autocomplete="new-password" placeholder="At least 8 characters">
+                      <button class="pw-toggle" type="button" data-for="acct-reset-password" aria-pressed="false" aria-label="Show password">Show</button>
+                    </div>
+                  </div>
+                  <p id="acct-reset-status" class="status" role="status" aria-live="polite"></p>
+                  <button id="acct-reset-btn" class="btn btn-primary btn-block" type="submit"><span>Save new password</span></button>
+                </form>
+              </section>
+
+              <!-- Message (check your inbox, password updated) -->
+              <section id="acct-notice" class="view done" data-panel="notice" aria-labelledby="notice-title" hidden tabindex="-1">
+                <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+                <h3 id="notice-title" class="view-title"></h3>
+                <p id="notice-text"></p>
+                <button id="notice-btn" class="link-btn" type="button" data-go="login">Back to log in</button>
+              </section>
+
+              <!-- Logged in -->
+              <section id="acct-account" class="view done" data-panel="account" aria-labelledby="account-title" hidden tabindex="-1">
+                <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+                <h3 id="account-title" class="view-title">You’re logged in</h3>
+                <dl class="account-details">
+                  <div><dt>Email</dt><dd id="acct-email-out"></dd></div>
+                  <div><dt>Mobile</dt><dd id="acct-mobile-out"></dd></div>
+                </dl>
+                <button id="acct-logout" class="btn btn-primary btn-block" type="button"><span>Log out</span></button>
+              </section>
             </div>
 
-            <!-- Step 2: enter the code -->
-            <div id="step-verify" class="step" hidden>
-              <p class="verify-lead">Enter the 6-digit code we sent to <strong id="verify-target"></strong>.</p>
-
-              <form id="verify-form" novalidate>
-                <div class="otp" role="group" aria-label="6-digit code">
-                  <input id="otp-1" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="Digit 1 of 6">
-                  <input id="otp-2" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 2 of 6">
-                  <input id="otp-3" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 3 of 6">
-                  <input id="otp-4" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 4 of 6">
-                  <input id="otp-5" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 5 of 6">
-                  <input id="otp-6" class="input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="off" aria-label="Digit 6 of 6">
+            <!-- ===== Launch list (shown until accounts are connected) ===== -->
+            <div id="waitlist">
+              <div id="step-identify" class="step">
+                <div class="tabs" role="tablist" aria-label="Contact by" data-tab="email">
+                  <span class="tab-thumb" aria-hidden="true"></span>
+                  <button id="tab-email" class="tab" type="button" role="tab" data-channel="email"
+                          aria-selected="true" aria-controls="panel-email">
+                    <svg class="ico" aria-hidden="true"><use href="#i-mail"/></svg><span>Email</span>
+                  </button>
+                  <button id="tab-phone" class="tab" type="button" role="tab" data-channel="phone"
+                          aria-selected="false" aria-controls="panel-phone" tabindex="-1">
+                    <svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Phone</span>
+                  </button>
                 </div>
 
-                <p id="verify-status" class="status" role="status" aria-live="polite"></p>
+                <!-- Netlify Forms picks this form up when the site is deployed (see login.js) -->
+                <form id="login-form" name="yukti-signup" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+                  <input type="hidden" name="form-name" value="yukti-signup">
+                  <input type="hidden" name="channel" id="login-channel" value="email">
+                  <p class="hp" aria-hidden="true"><label>Leave this empty <input id="bot-field" name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
-                <button id="verify-btn" class="btn btn-primary btn-block" type="submit">
-                  <span>Verify and log in</span>
-                </button>
-              </form>
+                  <div id="panel-email" class="field" role="tabpanel" aria-labelledby="tab-email">
+                    <label for="login-email">Email address</label>
+                    <input id="login-email" class="input" name="email" type="email" inputmode="email"
+                           autocomplete="email" placeholder="name@example.com" autocapitalize="off" spellcheck="false">
+                  </div>
 
-              <div class="verify-actions">
-                <button id="resend-btn" class="link-btn" type="button" disabled>Resend code</button>
-                <button id="change-btn" class="link-btn" type="button">Use a different email</button>
+                  <div id="panel-phone" class="field" role="tabpanel" aria-labelledby="tab-phone" hidden>
+                    <label for="login-phone">Mobile number</label>
+                    <div class="phone-row">
+                      <select id="login-cc" class="input" name="cc" aria-label="Country code">
+                        <option value="+91" selected>IN +91</option>
+                        <option value="+1">US +1</option>
+                        <option value="+44">UK +44</option>
+                        <option value="+971">AE +971</option>
+                        <option value="+65">SG +65</option>
+                        <option value="+61">AU +61</option>
+                      </select>
+                      <input id="login-phone" class="input" name="phone" type="tel" inputmode="tel"
+                             autocomplete="tel-national" placeholder="98765 43210">
+                    </div>
+                  </div>
+
+                  <p id="login-status" class="status" role="status" aria-live="polite"></p>
+
+                  <button id="send-btn" class="btn btn-primary btn-block" type="submit">
+                    <span>Notify me</span>
+                    <svg class="ico" aria-hidden="true"><use href="#i-arrow"/></svg>
+                  </button>
+                  <p id="privacy-note" class="privacy">We’ll only use this to tell you when Yukti launches.</p>
+                </form>
               </div>
-            </div>
 
-            <!-- Step 3: done -->
-            <div id="step-done" class="step done" hidden tabindex="-1">
-              <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
-              <h3 id="done-title">You’re logged in</h3>
-              <p id="done-text"></p>
-              <button id="restart-btn" class="link-btn" type="button">Add another email or number</button>
+              <div id="step-done" class="step done" hidden tabindex="-1">
+                <span class="done-badge" aria-hidden="true"><svg class="ico"><use href="#i-check"/></svg></span>
+                <h3 id="done-title" class="view-title">You’re on the list</h3>
+                <p id="done-text"></p>
+                <button id="restart-btn" class="link-btn" type="button">Add another email or number</button>
+              </div>
             </div>
 
           </div>
